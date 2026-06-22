@@ -39,8 +39,15 @@ python nptel_parser.py
 ### 2. Example Input
 
 ```text
+Enter Subject: Principles Of Economics, IIT Madras
 Enter data string: 43871371949510736147630849179255.3312.93
 ```
+After the script processes...
+'''text
+Is this the last subject? (y/n): 
+y -> gives the final output
+n -> for adding more subjects
+'''
 
 ### 3. Output
 
