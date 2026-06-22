@@ -44,22 +44,4 @@ Enter data string: 43871371949510736147630849179255.3312.93
 
 ### 3. Output
 
-The script maps the extracted variables and outputs a structured dictionary:
-
-```python
-{
-    'Enrolled': 4387,
-    'Registered': 1371,
-    'Certified': 949,
-    'Gold': 5,
-    'Silver': 107,
-    'Elite': 361,
-    'Success': 476,
-    'Participation': 308,
-    'Toppers': 49,
-    'Minimum Mark': 17,
-    'Maximum Mark': 92,
-    'Average Mark': 55.33,
-    'Standard Deviation': 12.93
-}
-```
+The script maps the extracted variables and outputs an excel file.
