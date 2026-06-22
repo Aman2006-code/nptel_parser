@@ -21,7 +21,7 @@
 
 # '.' appeas for Average Mark and Standard Deviation in the form of 'dd.ff'
 
-data_string = "43871371949510736147630849179255.3312.93"
+data_string = input("Enter data string: ")
 data = data_string.split(".")
 if len(data) != 3:
     raise ValueError("Unintended data format")
