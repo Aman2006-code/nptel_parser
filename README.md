@@ -20,3 +20,40 @@ The script first isolates the decimal points at the end of the string to extract
 3.  `Maximum Mark <= 100`
 
 If a specific sequence of chunks mathematically satisfies all of these constraints simultaneously, it is finalized and mapped to the respective statistical headers.
+## Usage
+
+### 1. Execution
+
+Run the script in your terminal environment. It will prompt you to enter the raw, unformatted string copied from the NPTEL statistics page:
+
+```bash
+python nptel_parser.py
+```
+
+### 2. Example Input
+
+```text
+Enter data string: 43871371949510736147630849179255.3312.93
+```
+
+### 3. Output
+
+The script maps the extracted variables and outputs a structured dictionary:
+
+```python
+{
+    'Enrolled': 4387,
+    'Registered': 1371,
+    'Certified': 949,
+    'Gold': 5,
+    'Silver': 107,
+    'Elite': 361,
+    'Success': 476,
+    'Participation': 308,
+    'Toppers': 49,
+    'Minimum Mark': 17,
+    'Maximum Mark': 92,
+    'Average Mark': 55.33,
+    'Standard Deviation': 12.93
+}
+```
