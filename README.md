@@ -22,6 +22,12 @@ The script first isolates the decimal points at the end of the string to extract
 If a specific sequence of chunks mathematically satisfies all of these constraints simultaneously, it is finalized and mapped to the respective statistical headers.
 ## Usage
 
+## 0. Pre-Requisites
+After forking the repo get a python virtual enviornment and install the pre requisites by running:
+```bash
+pip install -r requirements.txt
+```
+
 ### 1. Execution
 
 Run the script in your terminal environment. It will prompt you to enter the raw, unformatted string copied from the NPTEL statistics page:
