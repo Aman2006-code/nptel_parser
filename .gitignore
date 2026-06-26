@@ -1,5 +1,6 @@
 *.png
 *.xlsx
+*.xlsx
 venv/
 __pycache__
 *.json
