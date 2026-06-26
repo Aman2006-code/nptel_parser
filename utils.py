@@ -25,14 +25,20 @@ header = [
 
 
 # To create a loop to ask for as many as input as user wishes.
-def validator(parameter):
-    if parameter.lower() == "y" or parameter.lower() == "":
-        return "y"
-    elif parameter.lower() == "n":
-        return "n"
+def validator(parameter, defaultYes):
+    if defaultYes:
+        defaultKey = "y"
+        oppositeKey = "n"
+    else:
+        defaultKey = "n"
+        oppositeKey = "y"
+    if parameter.lower() == defaultKey or parameter.lower() == "":
+        return defaultKey
+    elif parameter.lower() == oppositeKey:
+        return oppositeKey
     else:
         parameter = input("Invalid input. Please enter a valid option (y/N): ")
-        return validator(parameter)
+        return validator(parameter, defaultYes)
 
 
 # Don't use this function directly in script.py. Use load_file() instead...
@@ -88,11 +94,14 @@ def abbrivate_subject(subject_name):
 
 
 # This is to get subject of intrest input from the user.
-def getSubjectIdAndAbbrivation(courses):
+def getSubjectIdAndAbbrivation(courses, is_doc, subject):
     checker = {sub.lower(): (sub, info) for sub, info in courses.items()}
     while True:
         try:
-            subject = input("Enter subject: ").strip()
+            if not is_doc:
+                subject = input("Enter subject: ").strip()
+            else:
+                subject = subject
             if not subject:
                 print("Skipping subject...")
                 return None, None, None
@@ -134,6 +143,9 @@ def getSubjectIdAndAbbrivation(courses):
                             state = True
                     course_id = info_list[int(institute_code) - 1]["id"]
                     return subject_name, course_id, abbrivate_subject(subject_name)
+            if is_doc:
+                print(f"Subject '{subject}' not found in database. Skipping...")
+                return None, None, None
             raise ValueError("Subject not found. Please enter a valid subject.")
         except ValueError as e:
             print(f"Error: {e}. Please enter a valid subject.")
@@ -158,6 +170,9 @@ def get_course_stats(course_id):
 
 # For calculating the mean in case of data from multiple years available
 def average_stat(stat):
+    if not stat.get("data") or len(stat["data"]) == 0:
+        print("No statistical data available for this course on NPTEL.")
+        return None
     # Cleaning
     course_stats = stat["data"][0]["run_wise_stats"]
     # Mean calculation
@@ -178,10 +193,8 @@ def add_parameters(result, subject, abbr):
 
     res["cert_percent"] = (res["Certified"] / registered) * 100
     res["gold_percent"] = (res["Gold"] / registered) * 100
-    res["performance_percent"] = (
-        (res["Gold"] + res["Silver"] + res["Elite"]) / registered
-    ) * 100
-    res["success_percent"] = (res["Success"] / registered) * 100
+    res["performance_percent"] = ((res["Elite"]) / registered) * 100
+    res["success_percent"] = ((res["Success"] + res["Elite"]) / registered) * 100
 
     base_score = (
         (res["cert_percent"] * 0.85)
@@ -209,6 +222,7 @@ def save_to_excel(df):
     ]
     columns_order = ["Subject", "Subject Abbreviation"] + header + calculated_columns
     df = df[columns_order]
+    df = df.round(2)
 
     df.to_excel("nptel_statistics.xlsx", index=False)
     print("Statistics saved to nptel_statistics.xlsx")
@@ -227,11 +241,11 @@ def plot(df):
         in [
             "min_mark",
             "max_mark",
-            "avg_mark",
+            "average",
             "standard_deviation",
             "cert_percent",
             "gold_percent",
-            "perfomance_percent",
+            "performance_percent",
             "success_percent",
             "score",
         ]
@@ -300,3 +314,11 @@ def plot(df):
     plt.tight_layout()
     plt.savefig("nptel_plot.png", bbox_inches="tight")
     print("Plot saved as nptel_plot.png")
+
+
+def save_results(result_list):
+    df = pd.DataFrame(result_list)
+    df.rename(columns={"index": "Subject"}, inplace=True)
+
+    save_to_excel(df)
+    plot(df)
