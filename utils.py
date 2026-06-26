@@ -172,7 +172,7 @@ def average_stat(stat):
 
 
 # To add helper parameters to the subject's stat list (calculated from existing data)
-def add_parameters(result, abbr):
+def add_parameters(result, subject, abbr):
     res = result.copy()
     registered = res["Registered"]
 
@@ -195,6 +195,7 @@ def add_parameters(result, abbr):
     final_score = base_score - std_dev_penalty - enrollment_penalty
     res["score"] = max(0, round(final_score, 2))
     res["Subject Abbreviation"] = abbr
+    res["Subject"] = subject
 
     return res
 
@@ -219,6 +220,22 @@ def save_to_excel(df):
 def plot(df):
     fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12, 10))
     subjects = df["Subject Abbreviation"].tolist()
+    calculated_columns = [
+        col
+        for col in df.columns
+        if col
+        in [
+            "min_mark",
+            "max_mark",
+            "avg_mark",
+            "standard_deviation",
+            "cert_percent",
+            "gold_percent",
+            "perfomance_percent",
+            "success_percent",
+            "score",
+        ]
+    ]
 
     df.plot(
         x="Subject",
@@ -249,12 +266,11 @@ def plot(df):
                     ha="center",
                     va="bottom",
                     fontsize=9,
-                    fontweight="semibold",
                 )
 
     df.plot(
         x="Subject",
-        y="Standard Deviation",
+        y="standard_deviation",
         kind="line",
         marker="o",
         color="tomato",
@@ -279,9 +295,8 @@ def plot(df):
                     ha="center",
                     va="bottom",
                     fontsize=9,
-                    fontweight="semibold",
                 )
 
     plt.tight_layout()
-    plt.savefig("nptel_charts.png", dpi=300)
-    plt.show()
+    plt.savefig("nptel_plot.png", bbox_inches="tight")
+    print("Plot saved as nptel_plot.png")

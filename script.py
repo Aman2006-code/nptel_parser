@@ -20,7 +20,7 @@ while done.lower() != "n":
             done = utils.validator(input("Do you want to retry? (Y/n): "))
         break
     if res:
-        res = utils.add_parameters(res, course_abbr)
+        res = utils.add_parameters(res, course, course_abbr)
         result_list.append(res)
     else:
         print("Not enough Data...Try re-entering the course...")
